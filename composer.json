@@ -9,7 +9,7 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "n.pashkevich\\elastic-client\\": "src"
+            "Kdteam\\ElasticSearchClient\\": "src"
         }
     }
 }
