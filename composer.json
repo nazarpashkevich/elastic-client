@@ -1,0 +1,15 @@
+{
+    "name": "n.pashkevich/elastic-client",
+    "description": "Client for elasticsearch api",
+    "type": "library",
+    "require": {
+        "elasticsearch/elasticsearch": "^5.5"
+    },
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "n.pashkevich\\elastic-client\\": "src"
+        }
+    }
+}
