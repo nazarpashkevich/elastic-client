@@ -39,9 +39,9 @@ class ElasticSearchClient
 
     private function toElastic($arLogData)
     {
+        date_default_timezone_set('UTC');
         $arEntryParams = [
-            'timestamp' => strtotime("-2 days"),
-            '@timestamp' => strtotime("-2 days"),
+            'timestamp' => date('c'),
         ];
 
         foreach ($arLogData as $k => $datum) {
