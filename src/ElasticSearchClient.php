@@ -16,20 +16,20 @@ class ElasticSearchClient
 
     private $strIndexName;
     private $elasticClient;
-    private $fileName;
     private $logClient;
+    private $baseParams = [];
 
-    public function __construct($indexName, $host, $port, $fileName)
+    public function __construct($indexName, $host, $port, $baseParams)
     {
-        if ($indexName && $host && $port && $fileName) {
+        if ($indexName && $host && $port) {
             $this->strIndexName = $indexName;
             $this->elasticClient = ClientBuilder::create()->setHosts(
                 [
                     $host . ':' . $port
                 ]
             )->build();
-            $this->fileName = $fileName;
             $this->logClient = new CliEcho();
+            $this->baseParams = $baseParams;
         } else {
             new Exception("ERROR, invalid input data!");
         }
@@ -37,7 +37,7 @@ class ElasticSearchClient
 
     public function toLog($text, array $arLogData, $date = false, $withOutput = false, $status = STATUS_CONSOLE_SUCCESS)
     {
-        $arLogData['message'] = $this->fileName . ' (' . ($date ? $date : date('d.m.Y H:i:s')) . ') - ' . $text;
+        $arLogData['message'] = '(' . ($date ? $date : date('d.m.Y H:i:s')) . ') - ' . $text;
         if ($withOutput) {
             echo $this->logClient->toConsole($text, $status) . PHP_EOL;
         }
@@ -47,9 +47,8 @@ class ElasticSearchClient
     private function toElastic($arLogData)
     {
         date_default_timezone_set('UTC');
-        $arEntryParams = [
-            'timestamp' => date('c'),
-        ];
+        $arEntryParams = $this->baseParams;
+        $arEntryParams['timestamp'] = date('c');
 
         foreach ($arLogData as $k => $datum) {
             $arEntryParams[$k] = $datum;
