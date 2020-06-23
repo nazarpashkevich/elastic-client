@@ -6,9 +6,10 @@
  * Time: 15:07
  */
 
-namespace Kdteam;
+namespace Kdteam\ElasticSearchClient;
 
 use Elasticsearch\ClientBuilder;
+use Exception;
 
 class ElasticSearchClient
 {
@@ -33,13 +34,14 @@ class ElasticSearchClient
     public function toLog($text, array $arLogData)
     {
         $arLogData['message'] = $text;
-        $this->toElastic($arLogData);
+        return $this->toElastic($arLogData);
     }
 
     private function toElastic($arLogData)
     {
         $arEntryParams = [
-          'timestamp' => date('c')
+            'timestamp' => strtotime("-2 days"),
+            '@timestamp' => strtotime("-2 days"),
         ];
 
         foreach ($arLogData as $k => $datum) {
@@ -47,9 +49,9 @@ class ElasticSearchClient
         }
 
         $params = [
-          'index' => $this->strIndexName,
-          'type' => 'my_type',
-          'body' => $arEntryParams
+            'index' => $this->strIndexName,
+            'type' => 'my_type',
+            'body' => $arEntryParams
         ];
 
         return $this->elasticClient->index($params);
