@@ -16,24 +16,31 @@ class ElasticSearchClient
 
     private $strIndexName;
     private $elasticClient;
+    private $fileName;
+    private $logClient;
 
-    public function __construct($indexName, $host, $port)
+    public function __construct($indexName, $host, $port, $fileName)
     {
-        if ($indexName && $host && $port) {
+        if ($indexName && $host && $port && $fileName) {
             $this->strIndexName = $indexName;
             $this->elasticClient = ClientBuilder::create()->setHosts(
                 [
                     $host . ':' . $port
                 ]
             )->build();
+            $this->fileName = $fileName;
+            $this->logClient = new CliEcho();
         } else {
             new Exception("ERROR, invalid input data!");
         }
     }
 
-    public function toLog($text, array $arLogData)
+    public function toLog($text, array $arLogData, $date = false, $withOutput = false, $status = STATUS_CONSOLE_SUCCESS)
     {
-        $arLogData['message'] = $text;
+        $arLogData['message'] = $this->fileName . ' (' . ($date ? $date : date('d.m.Y H:i:s')) . ') - ' . $text;
+        if ($withOutput) {
+            echo $this->logClient->toConsole($text, $status) . PHP_EOL;
+        }
         return $this->toElastic($arLogData);
     }
 
