@@ -57,7 +57,8 @@ class ElasticSearchClient
 
         $params = [
             'index' => $this->strIndexName,
-            'body' => $arEntryParams
+            'body' => $arEntryParams,
+            'type' => '_doc'
         ];
 
         return $this->elasticClient->index($params);
