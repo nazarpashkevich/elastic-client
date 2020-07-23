@@ -9,6 +9,7 @@
 namespace Kdteam\ElasticSearchClient;
 
 use Elasticsearch\ClientBuilder;
+use Kdteam\CliOutput\CliOutput;
 use Exception;
 
 class ElasticSearchClient
@@ -28,7 +29,7 @@ class ElasticSearchClient
                     $host . ':' . $port
                 ]
             )->build();
-            $this->logClient = new CliEcho();
+            $this->logClient = new CliOutput();
             $this->baseParams = $baseParams;
         } else {
             new Exception("ERROR, invalid input data!");
@@ -39,7 +40,7 @@ class ElasticSearchClient
     {
         $arLogData['message'] = '(' . ($date ? $date : date('d.m.Y H:i:s')) . ') - ' . $text;
         if ($withOutput) {
-            echo $this->logClient->toConsole($text, $status) . PHP_EOL;
+            $this->logClient->toConsole($text, $status) . PHP_EOL;
         }
         return $this->toElastic($arLogData);
     }

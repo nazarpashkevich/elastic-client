@@ -3,7 +3,8 @@
     "description": "Client for elasticsearch api",
     "type": "library",
     "require": {
-        "elasticsearch/elasticsearch": "^5.5"
+        "elasticsearch/elasticsearch": "^5.5",
+        "n.pashkevich/cli_output": "^1.1"
     },
     "license": "MIT",
     "minimum-stability": "stable",
