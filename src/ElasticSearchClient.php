@@ -57,7 +57,6 @@ class ElasticSearchClient
 
         $params = [
             'index' => $this->strIndexName,
-            'type' => 'my_type',
             'body' => $arEntryParams
         ];
 
