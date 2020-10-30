@@ -42,7 +42,11 @@ class ElasticSearchClient
         if ($withOutput) {
             $this->logClient->toConsole($text, $status) . PHP_EOL;
         }
-        return $this->toElastic($arLogData);
+        if (strpos($_SERVER['HOSTNAME'], '.kdteam.su') === false) {
+            return $this->toElastic($arLogData);
+        } else {
+            return true;
+        }
     }
 
     private function toElastic($arLogData)
