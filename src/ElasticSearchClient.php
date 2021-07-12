@@ -19,8 +19,9 @@ class ElasticSearchClient
     private $elasticClient;
     private $logClient;
     private $baseParams = [];
+    private $cliMode = true;
 
-    public function __construct($indexName, $host, $port, $baseParams)
+    public function __construct($indexName, $host, $port, $baseParams, $cli = true)
     {
         if ($indexName && $host && $port) {
             $this->strIndexName = $indexName;
@@ -31,6 +32,7 @@ class ElasticSearchClient
             )->build();
             $this->logClient = new CliOutput();
             $this->baseParams = $baseParams;
+            $this->cliMode = $cli;
         } else {
             new Exception("ERROR, invalid input data!");
         }
@@ -44,7 +46,9 @@ class ElasticSearchClient
         $status = STATUS_CONSOLE_SUCCESS
     ) {
         $arLogData['message'] = '(' . ($date ? $date : date('d.m.Y H:i:s')) . ') - ' . $text;
-        $this->logClient->toConsole($text, $status) . PHP_EOL;
+        if ($this->cliMode) {
+            $this->logClient->toConsole($text, $status) . PHP_EOL;
+        }
         if ($sendToElastic) {
             if (strpos($_SERVER['HOSTNAME'], '.kdteam.su') === false) {
                 return $this->toElastic($arLogData);
