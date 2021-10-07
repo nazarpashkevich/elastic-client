@@ -3,7 +3,7 @@
     "description": "Client for elasticsearch api",
     "type": "library",
     "require": {
-        "php": "7.2.2",
+        "php": "^7.2.2",
         "elasticsearch/elasticsearch": "^5.5",
         "n.pashkevich/cli_output": "^1.1"
     },
