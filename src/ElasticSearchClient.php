@@ -39,18 +39,24 @@ class ElasticSearchClient
     }
 
     public function toLog(
-        $text,
+        string $text,
         array $arLogData,
-        $date = false,
-        $sendToElastic = false,
-        $status = STATUS_CONSOLE_SUCCESS
+        string $status = STATUS_CONSOLE_SUCCESS,
+        bool $output = true,
+        bool $sendToElastic = false
     ) {
-        $arLogData['message'] = '(' . ($date ? $date : date('d.m.Y H:i:s')) . ') - ' . $text;
-        if ($this->cliMode) {
+        $arLogData['message'] = '(' . date('d.m.Y H:i:s') . ') - ' . $text;
+        if ($output) {
             $this->logClient->toConsole($text, $status) . PHP_EOL;
         }
         if ($sendToElastic) {
-            if (strpos($_SERVER['HOSTNAME'], '.kdteam.su') === false) {
+            if (defined('ENV')) {
+                if (strtolower(ENV) == 'dev') {
+                    return true;
+                }
+            }
+            if (strpos($_SERVER['HOSTNAME'], '.kdteam.su') === false &&
+                strpos($_SERVER['HOSTNAME'], '.kdteamcompany.com') === false) {
                 return $this->toElastic($arLogData);
             } else {
                 return true;
